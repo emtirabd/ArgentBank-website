@@ -42,25 +42,30 @@ body {
   padding: 5px 20px;
 }
 
-.main-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
 
 .main-nav a.router-link-exact-active {
   color: #42b983;
 }
 
 .main-nav-item {
+  font-weight: bold;
+  color: #2c3e50;
   text-decoration: none;
   margin-right: 0.5rem;
 }
 
 .main-nav-item:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 
+.main-nav-item i {
+  padding-right: 5px;
+}
+
 .main-nav-logo {
+  font-weight: bold;
+  color: #2c3e50;
   display: flex;
   align-items: center;
 }
