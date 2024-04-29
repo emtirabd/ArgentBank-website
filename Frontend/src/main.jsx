@@ -1,10 +1,11 @@
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
-import '../designs/css/main.css'
+import '/designs/css/main.css'
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
 import Home from './pages/home.jsx'
 import Signin from './pages/signin.jsx'
+import User from './pages/user.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/signin" element={<Signin/>} />
+      <Route path="/user" element={<User/>} />
       </Routes>
       <Footer />
     </BrowserRouter>
