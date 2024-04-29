@@ -4,6 +4,7 @@ import '../designs/css/main.css'
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
 import Home from './pages/home.jsx'
+import Signin from './pages/signin.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -11,6 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Navbar />
       <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/signin" element={<Signin/>} />
       </Routes>
       <Footer />
     </BrowserRouter>
