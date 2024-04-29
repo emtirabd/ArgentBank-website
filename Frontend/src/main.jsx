@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
-import '/designs/css/main.css'
+import '/src/designs/css/main.css'
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
 import Home from './pages/home.jsx'
