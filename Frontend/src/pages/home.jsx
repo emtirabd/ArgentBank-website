@@ -2,7 +2,7 @@ import Feature from "../components/feature"
 
 function Home() {
   return (
-    <div>
+    <main>
     <div className="hero">
         <section className="hero-content">
           <p className="subtitle">No fees.</p>
@@ -12,7 +12,7 @@ function Home() {
         </section>
       </div>
       <Feature />
-      </div>
+      </main>
   )
 }
 export default Home
