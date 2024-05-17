@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
 function Signin() {
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // état de connexion local
+  const [error, setError] = useState(null);
+  const isLoggedIn = useSelector((state) => state.log.isLoggedIn);
   const passwordRef = useRef();
   const usernameRef = useRef();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Rediriger si l'utilisateur est déjà connecté
@@ -38,33 +41,24 @@ function Signin() {
     try {
       const response = await loginRequest();
       if (response.error) {
-        triggerLoginFailureAnimation(); // animation en cas d'échec
+        setError('Identifiants invalides. Veuillez réessayer.'); 
       } else {
         const token = response.body.token;
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
 
         if (rememberMe) {
           localStorage.setItem('token', token);
         }
 
-        setIsLoggedIn(true); // mettre à jour l'état de connexion
+        dispatch({ type: "LOGIN_SUCCESS" });
         navigate('/profile'); // redirection après succès
       }
     } catch (error) {
-      triggerLoginFailureAnimation(); // gestion des erreurs
+      setError('Une erreur s\'est produite. Veuillez réessayer.'); 
     }
   };
 
-  // Animation en cas d'échec
-  const triggerLoginFailureAnimation = () => {
-    passwordRef.current.classList.add('loginFailed');
-    usernameRef.current.classList.add('loginFailed');
-    setTimeout(() => {
-      passwordRef.current.classList.remove('loginFailed');
-      usernameRef.current.classList.remove('loginFailed');
-    }, 500);
-  };
-
+  
   // Structure du composant
   return (
     <main className="main bg-dark">
@@ -91,6 +85,7 @@ function Signin() {
           <button className="sign-in-button" type="submit">
             Sign In
           </button>
+          {error && <div className="error-message">{error}</div>}
         </form>
       </section>
     </main>
