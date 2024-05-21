@@ -24,7 +24,7 @@ function Navbar() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </NavLink>
-      <div>
+      <div>             
         {isLoggedIn ? (
           <div>
             <NavLink to="/profile" className="main-nav-item">
