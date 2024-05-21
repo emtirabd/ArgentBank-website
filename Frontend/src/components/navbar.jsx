@@ -30,15 +30,13 @@ function Navbar() {
             <NavLink to="/profile" className="main-nav-item">
               <i className="fa fa-user-circle"></i> {userData.userName}
             </NavLink>
-            {location.pathname === '/profile' && (
               <NavLink
                 to="/"
                 onClick={handleLogout}
                 className="main-nav-item"
               >
                 <i className="fa fa-sign-out"></i> Sign Out
-              </NavLink>
-            )}
+              </NavLink> 
           </div>
         ) : (
           <NavLink to="/signin" className="main-nav-item">
