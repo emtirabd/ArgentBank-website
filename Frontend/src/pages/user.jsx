@@ -3,79 +3,50 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../reducers/user.reducer";
 import UserEdit from "../components/editUser";
-import Account from "../components/Account";
+import Account from "../components/account";
 import data from "../data/account.json";
 
 function User() {
   const isLoggedIn = useSelector((state) => state.log.isLoggedIn);
-  const { firstName, lastName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [accounts, setAccounts] = useState([]);
 
-  // FETCH GETUSER //
-
-  async function getUser() {
-    // GET TOKEN //
-    let token = "";
-    const getToken = () => {
-      token = window.sessionStorage.getItem("token");
-      if (!token) {
-        token = window.localStorage.getItem("token");
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoggedIn) {
+        navigate("/signin");
+        return;
       }
-      return token;
-    };
-    getToken();
 
-    // GET ACCOUNTS //
-    const getAccounts = () => {
-      const userId = `${firstName} ${lastName}`;
-      const userAccounts = data.usersAccounts.find(
-        (userAccount) => userAccount.id === userId
-      );
-      if (userAccounts) {
-        return userAccounts.accounts;
-      }
-      return [];
-    };
-    const accountsData = getAccounts();
-    setAccounts(accountsData);
+      const token = window.sessionStorage.getItem("token") || window.localStorage.getItem("token");
 
-    // USER DATA //
-    try {
-      const response = await fetch(
-        `http://localhost:3001/api/v1/user/profile`,
-        {
+      try {
+        const response = await fetch(`http://localhost:3001/api/v1/user/profile`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+          throw new Error("Problème de récupération de l'utilisateur:");
         }
-      );
-      if (!response.ok) {
-        throw new Error("Problème de récupération de l'utilisateur:");
+
+        const userData = await response.json();
+        dispatch(setUser(userData.body));
+
+        // GET ACCOUNTS //
+        const userId = `${userData.body.firstName} ${userData.body.lastName}`;
+        const userAccounts = data.usersAccounts.find((userAccount) => userAccount.id === userId);
+        if (userAccounts) {
+          setAccounts(userAccounts.accounts);
+        }
+      } catch (error) {
+        console.error("Problème de récupération de l'utilisateur:", error);
       }
-      const userData = await response.json();
-      return userData.body;
-    } catch (error) {
-      console.error("Problème de récupération de l'utilisateur:", error);
-      throw error;
-    }
-  }
+    };
 
-  // VERIFY ISLOGGED //
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/signin");
-    } else {
-      getUser()
-        .then((userData) => {
-          dispatch(setUser(userData));
-        })
-        .catch((error) =>
-          console.error("Problème de récupération de l'utilisateur:", error)
-        );
-    }
-  });
+    fetchData();
+  }, [isLoggedIn, dispatch, navigate]);
 
   return (
     <main className="main bg-dark">

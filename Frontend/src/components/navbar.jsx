@@ -1,11 +1,10 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 function Navbar() {
 
   const isLoggedIn = useSelector((state) => state.log.isLoggedIn);
   const userData = useSelector((state) => state.user);
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -19,7 +18,7 @@ function Navbar() {
       <NavLink className="main-nav-logo" to="/">
         <img
           className="main-nav-logo-image"
-          src="../src/designs/img/argentBankLogo.png"
+          src="../src/designs/img/argentBankLogo.webp"
           alt="Argent Bank Logo"
         />
         <h1 className="sr-only">Argent Bank</h1>

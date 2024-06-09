@@ -6,8 +6,15 @@ function UserEdit() {
   const userData = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedButtonName, setEditedButtonName] = useState("Edit Name");
+  const [editedFirstName, setEditedFirstName] = useState(userData.firstName);
+  const [editedLastName, setEditedLastName] = useState(userData.lastName);
+  const [editedUserName, setEditedUserName] = useState(userData.userName);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    setEditedFirstName(userData.firstName);
+    setEditedLastName(userData.lastName);
+  }, [userData.firstName, userData.lastName]);
 
   let token = "";
   const getToken = () => {
@@ -21,38 +28,39 @@ function UserEdit() {
 
   const handleEditButtonClick = () => {
     setIsEditing(true);
-    setEditedButtonName(userData.userName);
   };
 
-  const handleButtonNameChange = (e) => {
-    setEditedButtonName(e.target.value);
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setEditedFirstName(userData.firstName);
+    setEditedLastName(userData.lastName);
+    setEditedUserName(userData.userName);
   };
 
-  const handleInputBlur = async () => {
+  const handleSaveClick = async () => {
     setIsEditing(false);
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/v1/user/profile",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            userName: editedButtonName,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3001/api/v1/user/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          firstName: editedFirstName,
+          lastName: editedLastName,
+          userName: editedUserName,
+        }),
+      });
       if (response.ok) {
-        dispatch(updateUser({ userName: editedButtonName }));
+        const updatedUser = await response.json(); 
+        dispatch(updateUser(updatedUser.body));
       } else {
-        console.error("Erreur lors de l'édition de user name");
+        console.error("Erreur lors de l'édition de l'utilisateur");
       }
     } catch (error) {
-      console.error("Erreur lors de l'édition de user name");
+      console.error("Erreur lors de l'édition de l'utilisateur");
     }
-    setEditedButtonName("Edit Name");
   };
 
   useEffect(() => {
@@ -69,23 +77,39 @@ function UserEdit() {
         {userData.firstName} {userData.lastName}!
       </h1>
       {isEditing ? (
-        <input
-          ref={inputRef}
-          type="text"
-          value={editedButtonName}
-          onChange={handleButtonNameChange}
-          onBlur={handleInputBlur}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleInputBlur();
-            }
-          }}
-          className="input-button"
-        />
+        <div>
+          <div className="input-container">
+          <input
+            ref={inputRef}
+            type="text"
+            value={editedFirstName}
+            onChange={(e) => setEditedFirstName(e.target.value)}
+            className="input-button"
+            placeholder="First Name"
+          />
+          <input
+            type="text"
+            value={editedLastName}
+            onChange={(e) => setEditedLastName(e.target.value)}
+            className="input-button"
+            placeholder="Last Name"
+          />
+          <input
+            type="text"
+            value={editedUserName}
+            onChange={(e) => setEditedUserName(e.target.value)}
+            className="input-button"
+            placeholder="Username"
+          />
+          </div>
+          <div className="edit-container">
+          <button onClick={handleSaveClick} className="edit-button">Save</button>
+          <button onClick={handleCancelClick} className="edit-button">Cancel</button>
+          </div>
+        </div>
       ) : (
         <button className="edit-button" onClick={handleEditButtonClick}>
-          {editedButtonName}
+          Edit Name
         </button>
       )}
     </div>
