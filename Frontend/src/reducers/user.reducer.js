@@ -15,10 +15,8 @@ const userSlice = createSlice({
       state.userName = userName;
     },
     updateUser: (state, action) => {
-      const { firstName, lastName, userName } = action.payload;
-      if (userName) state.userName = userName;
-      if (firstName) state.firstName = firstName;
-      if (lastName) state.lastName = lastName;
+      const { userName } = action.payload;
+      state.userName = userName;
     },
   },
 });

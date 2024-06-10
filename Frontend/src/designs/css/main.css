@@ -273,6 +273,11 @@ body {
 .edit-container {
   margin: 10px;
 }
+
+input[readOnly]{
+  background-color: grey;
+}
+
 .edit-button {
   border-color: #00bc77;
   background-color: #00bc77;

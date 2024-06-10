@@ -32,8 +32,6 @@ function UserEdit() {
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedFirstName(userData.firstName);
-    setEditedLastName(userData.lastName);
     setEditedUserName(userData.userName);
   };
 
@@ -47,8 +45,6 @@ function UserEdit() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          firstName: editedFirstName,
-          lastName: editedLastName,
           userName: editedUserName,
         }),
       });
@@ -74,7 +70,7 @@ function UserEdit() {
       <h1>
         Welcome back
         <br />
-        {userData.firstName} {userData.lastName}!
+        {userData.userName}!
       </h1>
       {isEditing ? (
         <div>
@@ -83,16 +79,16 @@ function UserEdit() {
             ref={inputRef}
             type="text"
             value={editedFirstName}
-            onChange={(e) => setEditedFirstName(e.target.value)}
             className="input-button"
             placeholder="First Name"
+            readOnly
           />
           <input
             type="text"
             value={editedLastName}
-            onChange={(e) => setEditedLastName(e.target.value)}
             className="input-button"
             placeholder="Last Name"
+            readOnly
           />
           <input
             type="text"
