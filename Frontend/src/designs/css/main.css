@@ -275,7 +275,7 @@ body {
 }
 
 input[readOnly]{
-  background-color: grey;
+  background-color: rgb(159, 156, 156);
 }
 
 .edit-button {
